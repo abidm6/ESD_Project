@@ -37,6 +37,7 @@ void loop() {
     //digitalWrite(6, LOW);
   }
   //else{
+  analogWrite(pwm, 0);
   lcd.clear();
   
   // Read humidity
