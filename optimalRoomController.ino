@@ -1,3 +1,4 @@
+
 // Interfacing Arduino with DHT11 humidity and temperature sensor
  
 // include LCD library code
@@ -28,6 +29,40 @@ void setup() {
 }
  
 void loop() {
+
+  while(analogRead(A0) > 600){
+    if(digitalRead(Gas) == HIGH){
+      lcd.clear();
+      break;
+    }
+    
+    int ldr= analogRead(A0);
+  
+    lcd.setCursor(0,0);
+    lcd.print("Ldr out= ");
+    lcd.print(ldr);
+    lcd.setCursor(0,1);
+    lcd.print("Lower light!");
+  }
+
+    while(analogRead(A0) < 200){
+    if(digitalRead(Gas) == HIGH){
+      lcd.clear();
+      break;
+    }
+
+      
+    int ldr= analogRead(A0);
+  
+    lcd.setCursor(0,0);
+    lcd.print("Ldr out= ");
+    lcd.print(ldr);
+    lcd.setCursor(0,1);
+    lcd.print("Increase light!");
+  }
+
+
+  
   //delay(1000);           // wait 1s between readings
   while(digitalRead(Gas) == HIGH){
     lcd.setCursor(0,0);
@@ -36,7 +71,6 @@ void loop() {
     //digitalWrite(10 , HIGH);
     //digitalWrite(6, LOW);
   }
-  //else{
   analogWrite(pwm, 0);
   lcd.clear();
   
