@@ -138,6 +138,7 @@ void loop() {
     analogWrite(pwm, 255);
   }
  while(Temp<18){
+  analogWrite(pwm,0);
   analogWrite(6,255);
   delay(300);
   lcd.clear();
