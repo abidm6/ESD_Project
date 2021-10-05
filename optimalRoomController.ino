@@ -71,8 +71,9 @@ void loop() {
     //digitalWrite(10 , HIGH);
     //digitalWrite(6, LOW);
   }
-  analogWrite(pwm, 0);
+
   lcd.clear();
+  analogWrite(pwm, 0);
   
   // Read humidity
   byte RH = dht.readHumidity();
@@ -93,10 +94,43 @@ void loop() {
   humidity[7]        = RH / 10 + 48;
   humidity[8]        = RH % 10 + 48;
   lcd.setCursor(0, 0);
+  //lcd.print(Temp);
   lcd.print(temperature);
   lcd.setCursor(0, 1);
+  //lcd.print(RH);
   lcd.print(humidity);
   delay(300);
   lcd.clear();
+  while(Temp > 22){
+
+    if(digitalRead(Gas) == HIGH){
+      while(digitalRead(Gas) == HIGH){
+        delay(300);
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.print("Gas Detected Yes");
+        analogWrite(pwm, 255);
+        //digitalWrite(10 , HIGH);
+        //digitalWrite(6, LOW);
+      }
+    }
+    
+    if(byte Temp = dht.readTemperature() <23){
+      lcd.clear();
+      lcd.setCursor(0,0);
+      lcd.print("Temp optimal");
+      lcd.setCursor(0,1);
+      lcd.print("Fan turned off");
+      delay(1000);
+      break;
+    }
+    delay(300);
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("Too hot!");
+    lcd.setCursor(0,1);
+    lcd.print("Fan turned on");
+    analogWrite(pwm, 255);
+  }
  // }
 }
