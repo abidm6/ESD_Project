@@ -35,6 +35,8 @@ void loop() {
       lcd.clear();
       break;
     }
+    delay(300);
+    lcd.clear();
     
     int ldr= analogRead(A0);
   
@@ -50,7 +52,8 @@ void loop() {
       lcd.clear();
       break;
     }
-
+    delay(300);
+    lcd.clear();
       
     int ldr= analogRead(A0);
   
@@ -68,12 +71,14 @@ void loop() {
     lcd.setCursor(0,0);
     lcd.print("Gas Detected Yes");
     analogWrite(pwm, 255);
+    
     //digitalWrite(10 , HIGH);
     //digitalWrite(6, LOW);
   }
 
   lcd.clear();
   analogWrite(pwm, 0);
+  analogWrite(6,0);
   
   // Read humidity
   byte RH = dht.readHumidity();
@@ -132,5 +137,25 @@ void loop() {
     lcd.print("Fan turned on");
     analogWrite(pwm, 255);
   }
+ while(Temp<18){
+  analogWrite(6,255);
+  delay(300);
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Too cold!");
+  lcd.setCursor(0,1);
+  lcd.print("Heater on");
+
+ if(byte Temp = dht.readTemperature() >17){
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("Temp optimal");
+    lcd.setCursor(0,1);
+    lcd.print("Heater turned off");
+    delay(1000);
+    analogWrite(6,0);
+    break;
+    }
+ }
  // }
 }
