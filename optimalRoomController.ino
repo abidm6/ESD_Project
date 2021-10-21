@@ -7,13 +7,13 @@
 #include "DHT.h"
  
 #define DHTPIN 8            // DHT11 data pin is connected to Arduino pin 8
-#define pwm 10
+#define pwm 6
  
 // LCD module connections (RS, E, D4, D5, D6, D7)
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 int Gas = 9;
-int redLed = 7;
-int greenLed = 6;
+//int redLed = 7;
+//int greenLed = 6;
  
 #define DHTTYPE DHT11       // DHT11 sensor is used
 DHT dht(DHTPIN, DHTTYPE);   // Initialize DHT library
@@ -26,6 +26,7 @@ void setup() {
   lcd.begin(16, 2);
   dht.begin();
   pinMode(Gas , INPUT);
+  //pinMode(6, OUTPUT);
 }
  
 void loop() {
@@ -39,12 +40,23 @@ void loop() {
     lcd.clear();
     
     int ldr= analogRead(A0);
+    //analogWrite(10, 10);
+
+    
   
     lcd.setCursor(0,0);
     lcd.print("Ldr out= ");
     lcd.print(ldr);
     lcd.setCursor(0,1);
     lcd.print("Lower light!");
+
+//    for(int i=127; i>0; i--){
+//      analogWrite(10, i);
+//      delay(5);
+//    }
+      analogWrite(10,10);
+      digitalWrite(7,LOW);
+      analogWrite(pwm,0);
   }
 
     while(analogRead(A0) < 200){
@@ -56,12 +68,33 @@ void loop() {
     lcd.clear();
       
     int ldr= analogRead(A0);
+    //analogWrite(10,255);
+
+   
   
     lcd.setCursor(0,0);
     lcd.print("Ldr out= ");
     lcd.print(ldr);
     lcd.setCursor(0,1);
     lcd.print("Increase light!");
+
+//    for(int i=127; i<255; i++){
+//      analogWrite(10, i);
+//      delay(5);
+//    }
+    analogWrite(10,255);
+    digitalWrite(7,LOW);
+    analogWrite(pwm,0);
+
+    /*trying smth out
+    for(int i=0; i<255; i++){
+    analogWrite(10, i);
+    delay(5);
+    }
+    for(int i=255; i>0; i--){
+      analogWrite(10, i);
+      delay(5);
+    }*/
   }
 
 
@@ -78,7 +111,8 @@ void loop() {
 
   lcd.clear();
   analogWrite(pwm, 0);
-  analogWrite(6,0);
+  digitalWrite(7, LOW);
+  analogWrite(10,127);
   
   // Read humidity
   byte RH = dht.readHumidity();
@@ -139,7 +173,7 @@ void loop() {
   }
  while(Temp<18){
   analogWrite(pwm,0);
-  analogWrite(6,255);
+  digitalWrite(7, HIGH);
   delay(300);
   lcd.clear();
   lcd.setCursor(0,0);
@@ -164,7 +198,7 @@ void loop() {
     lcd.setCursor(0,0);
     lcd.print("Temp optimal");
     lcd.setCursor(0,1);
-    lcd.print("Heater turned off");
+    lcd.print("Heater off");
     delay(1000);
     analogWrite(6,0);
     break;
@@ -198,10 +232,43 @@ void loop() {
     lcd.print("Humidity optimal");
     lcd.setCursor(0,1);
     lcd.print("Fan turned off");
+}
+    delay(1000);
+    analogWrite(6,0);
+    break;
+    }
+
+  while(RH<40){
+  //analogWrite(pwm,255);
+  delay(300);
+  lcd.clear();
+  //lcd.setCursor(0,0);
+  //lcd.print("Too dry!");
+  lcd.setCursor(0,0);
+  lcd.print("Humidity too low!");
+
+ if(digitalRead(Gas) == HIGH){
+      while(digitalRead(Gas) == HIGH){
+        delay(300);
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.print("Gas Detected Yes");
+        analogWrite(pwm, 255);
+        //digitalWrite(10 , HIGH);
+        //digitalWrite(6, LOW);
+      }
+    }
+
+ if(byte RH = dht.readHumidity() >39){
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("Humidity optimal");
+    //lcd.setCursor(0,1);
+    //lcd.print("Fan turned off");
+}
     delay(1000);
     analogWrite(6,0);
     break;
     }
  }
  // }
-}
